@@ -18,11 +18,12 @@ class Player {
   update() {
     if (this.isJumping) {
       this.y += this.yVelocity;
+      this.x += 4;
       this.yVelocity += 1;
-      if (this.y >= 200) {
-        this.y = 200;
+      if (this.y >= 350) {
+        this.y = 350;
         this.isJumping = false;
-        this.yVelocity = 0;
+        this.yVelocity = 500;
       }
     }
   }

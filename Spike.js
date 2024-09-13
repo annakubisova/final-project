@@ -22,8 +22,8 @@ class Spike {
 
   update() {
     this.x += this.xVelocity;
-    if (this.x < 0) {
-      this.x = 100;
+    if (this.x < bob.x / 2 - windowX / 2) {
+      this.x = windowX / 2 + bob.x;
     }
   }
 }

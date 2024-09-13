@@ -3,8 +3,8 @@ class Floor {
   constructor() {
     this.x = 0;
     this.y = 400;
-    this.width = 600;
-    this.height = 200;
+    this.width = 7000;
+    this.height = 900;
   }
 
   draw() {
@@ -12,5 +12,8 @@ class Floor {
     rect(this.x, this.y, this.width, this.height);
   }
 
-  update() {}
+  update() {
+    this.x = -windowX;
+    //this.y = 400;
+  }
 }
