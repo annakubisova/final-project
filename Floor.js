@@ -1,10 +1,10 @@
 // Floor.js
 class Floor {
   constructor() {
-    this.x = 0;
+    this.x = -1000;
     this.y = 400;
     this.width = 7000;
-    this.height = 900;
+    this.height = 200;
   }
 
   draw() {
@@ -13,7 +13,9 @@ class Floor {
   }
 
   update() {
-    this.x = -windowX;
-    //this.y = 400;
+    let floorPos = this.x - bob.x;
+    if (floorPos < -windowWidth) {
+      this.x += windowWidth / 2;
+    }
   }
 }

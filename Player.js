@@ -5,7 +5,9 @@ class Player {
     this.size = 50;
     this.yVelocity = 0;
     this.jumpStrength = 15;
+    this.points = 0;
     this.isJumping = false;
+    this.isDead = false;
   }
 
   jump() {
