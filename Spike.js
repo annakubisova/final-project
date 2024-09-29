@@ -39,10 +39,19 @@ class Spike {
   }
 
   checkIfDead() {
-    if (this.x === bob.x && this.y === 400 && bob.y === 350) {
-      //add more restraints
-      //bob.isDead = true;
-      bob.y = 300;
+    let spikeLeftEdge = this.x;
+    let spikeRightEdge = this.x + this.width;
+    let bobLeftEdge = bob.x;
+    let bobRightEdge = bob.x + bob.size;
+
+    // Check if the player's x boundaries intersect the spike's x boundaries, and check if the player's y position is on the ground.
+    if (
+      bobRightEdge > spikeLeftEdge &&
+      bobLeftEdge < spikeRightEdge &&
+      bob.y >= 350
+    ) {
+      bob.isDead = true;
+      console.log("Bob is dead!");
     }
   }
 }

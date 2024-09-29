@@ -27,32 +27,57 @@ function setup() {
 
 function draw() {
   background(250, 200, 250);
-  translate(-bob.x + width / 2 - bob.size / 2, 350);
 
-  spikeArray.forEach(function (object) {
-    //calling internal functions in objects in the spikeArray array
-    object.update();
-    object.draw();
-  });
-  drawable.forEach(function (object) {
-    // calling internal functions in objects in the drawable array
-    object.update();
-    object.draw();
-  });
+  if (!bob.isDead) {
+    translate(-bob.x + width / 2 - bob.size / 2, 350);
+
+    spikeArray.forEach((object) => {
+      object.update();
+      object.draw();
+    });
+
+    drawable.forEach((object) => {
+      object.update();
+      object.draw();
+    });
+  } else {
+    fill(0);
+    textSize(32);
+    text("Game Over", bob.x + 200, 300);
+  }
+
   debugText();
+}
+
+function keyPressed() {
+  if (keyCode === UP_ARROW && !bob.isDead) {
+    bob.jump();
+  } else if (bob.isDead && key === "R") {
+    resetGame();
+  }
+}
+
+function resetGame() {
+  bob.isDead = false;
+  bob.x = 0;
+  bob.y = 350;
+  bob.points = 0;
+
+  spikeArray = spikeArray.map((spike, i) => {
+    return new Spike(i === 0 ? bob.x + 200 : spikeArray[i - 1].x + 400);
+  });
 }
 
 function debugText() {
   fill(0);
+  textSize(16);
   text("Y_index of bob: " + bob.y, bob.x + 200, 200);
   text("X_index of bob: " + bob.x, bob.x + 200, 220);
-  text("windowWidth:" + windowWidth, bob.x + 200, 240);
-  text("windowHeight:" + windowHeight, bob.x + 200, 260);
-  text("X of floor:" + floor.x, bob.x + 350, 200);
-  text("Number of points:" + bob.points, bob.x + 350, 220);
-
-  text("X_index of spike 0:" + spikeArray[0].x, bob.x + 120, 70);
-  text("X_index of spike 1:" + spikeArray[0].x, bob.x + 120, 70);
+  text("WindowWidth: " + windowWidth, bob.x + 200, 240);
+  text("WindowHeight: " + windowHeight, bob.x + 200, 260);
+  text("X of floor: " + floor.x, bob.x + 350, 200);
+  text("Points: " + bob.points, bob.x + 350, 220);
+  text("Dead: " + bob.isDead, bob.x + 350, 240); // Added dead status
 }
 
 function windowResized() {
