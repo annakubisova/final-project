@@ -26,7 +26,19 @@ function setup() {
 }
 
 function draw() {
-  background(250, 200, 250);
+  // Draw sky
+  background(135, 206, 235); // sky blue
+
+  // Draw sun
+  fill(255, 204, 0);
+  ellipse(width - 100, 100, 100);
+
+  // Draw clouds
+  for (let i = 0; i < 5; i++) {
+    fill(255);
+    ellipse(i * 200 + bob.x / 2, 100, 150, 80);
+    ellipse(i * 200 + bob.x / 2 + 30, 130, 180, 100);
+  }
 
   if (!bob.isDead) {
     translate(-bob.x + width / 2 - bob.size / 2, 350);

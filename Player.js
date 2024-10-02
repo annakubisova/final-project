@@ -32,6 +32,39 @@ class Player {
 
   draw() {
     fill(255, 255, 255);
-    rect(this.x, this.y, this.size, this.size);
+
+    // Draw head
+    ellipse(this.x + this.size / 2, this.y - this.size / 2, this.size * 0.8); // head
+
+    // Draw body
+    rect(this.x + this.size / 4, this.y, this.size / 2, this.size); // body
+
+    // Draw legs
+    line(
+      this.x + this.size / 4,
+      this.y + this.size,
+      this.x,
+      this.y + this.size + 20
+    ); // left leg
+    line(
+      this.x + (3 * this.size) / 4,
+      this.y + this.size,
+      this.x + this.size,
+      this.y + this.size + 20
+    ); // right leg
+
+    // Draw arms
+    line(
+      this.x + this.size / 4,
+      this.y + this.size / 2,
+      this.x,
+      this.y + this.size / 2 + 20
+    ); // left arm
+    line(
+      this.x + (3 * this.size) / 4,
+      this.y + this.size / 2,
+      this.x + this.size,
+      this.y + this.size / 2 + 20
+    ); // right arm
   }
 }
