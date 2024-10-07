@@ -1,12 +1,18 @@
 // Spike.js
 class Spike {
-  constructor() {
-    this.x = 200;
+  constructor(x) {
+    this.x = x;
     this.y = 400;
     this.width = 50;
     this.height = 50;
-    this.xVelocity = -1;
+    this.xVelocity = random(-3, -1); // Random speed for each spike
     this.isDead = false;
+  }
+
+  update() {
+    this.checkIfDead();
+    this.moveSpike();
+    this.x += this.xVelocity;
   }
 
   draw() {
@@ -21,19 +27,13 @@ class Spike {
     );
   }
 
-  update() {
-    this.checkIfDead();
-    this.moveSpike();
-    this.x += this.xVelocity;
-  }
-
   moveSpike() {
     if (this.x < bob.x - windowWidth / 2) {
       let furtherSpike = spikeArray.reduce((rightmost, spike) => {
         //find the spike furthest way
         return spike.x > rightmost.x ? spike : rightmost; //check if the
       });
-      this.x = furtherSpike.x + 400; // move spike 400x to the right of the furthest spike
+      this.x = furtherSpike.x + random(300, 600); // move spike 400x to the right of the furthest spike
       bob.points += 1;
     }
   }

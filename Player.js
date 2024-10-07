@@ -1,3 +1,4 @@
+// Player.js
 class Player {
   constructor() {
     this.x = 0;
