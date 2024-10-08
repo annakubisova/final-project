@@ -2,8 +2,8 @@
 class Powerup {
   constructor(x) {
     this.x = x;
-    this.y = random(height / 2, height - 100);
-    this.size = 20;
+    this.y = random(300, 400);
+    this.size = 40;
     this.type = random(["speed", "invincible"]); // 'speed' or 'invincibility'
   }
 
@@ -24,9 +24,9 @@ class Powerup {
 
   applyEffect(player) {
     if (this.type === "speed") {
-      player.applySpeedBoost();
+      player.speedBoost();
     } else {
-      player.applyInvincibility();
+      player.invincibility();
     }
     powerupSound.play();
   }

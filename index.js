@@ -12,6 +12,7 @@ let skyTimer = 0; // Timer to control sky color changes
 
 let bob; // Initialize variable for Player
 let floor;
+let enemies = [];
 let gameState = "startScreen"; // Set the initial state to startScreen
 let bgMusic;
 let myMusic;
@@ -46,6 +47,9 @@ function preload() {
   bgMusic = loadSound("assets/background.wav");
   bobDiedSound = loadSound("assets/bobdied.wav");
   gameOverMusic = loadSound("assets/gameover.wav");
+
+  // Load powerup sound
+  powerupSound = loadSound("assets/powerup.wav");
 }
 
 function setup() {
@@ -69,18 +73,16 @@ function setup() {
       i === 0 ? new Spike(bob.x + 200) : new Spike(spikeArray[i - 1].x + 400);
   }
 
-  // Create blocks
-  for (let i = 0; i < nrOfBlocks; i++) {
-    blockArray[i] =
-      i === 0 ? new Block(bob.x + 600) : new Block(blockArray[i - 1].x + 500);
+  // Initialize enemies array
+  for (let i = 0; i < 5; i++) {
+    let type = random(["bird", "monster"]);
+    enemies.push(new Enemy(type)); // Create either a bird or a monster
   }
 
   // Create powerups
   for (let i = 0; i < nrOfPowerups; i++) {
     powerups.push(new Powerup(random(bob.x + 500, bob.x + 1000)));
   }
-  // Initialize enemies array
-  enemies = [];
 }
 
 function draw() {
@@ -94,22 +96,18 @@ function draw() {
     push(); // Save the current transformation state
     translate(-bob.x + width / 2 - bob.size / 2, 350);
 
-    // Draw floor
+    // Draw floor, spikes, blocks, enemies, powerups and player
     floor.draw();
-
-    // Update and draw spikes
     spikeArray.forEach((spike) => {
       spike.update();
       spike.draw();
     });
 
-    // Update and draw blocks
     blockArray.forEach((block) => {
       block.update();
       block.draw();
     });
 
-    // Update and draw enemies
     enemies.forEach((enemy) => {
       enemy.update();
       enemy.draw();
@@ -118,7 +116,6 @@ function draw() {
       }
     });
 
-    // Update and draw powerups
     powerups.forEach((powerup) => {
       powerup.update();
       powerup.draw();
@@ -127,7 +124,6 @@ function draw() {
       }
     });
 
-    // Update and draw player
     bob.update();
     bob.draw();
 

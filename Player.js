@@ -68,26 +68,29 @@ class Player {
 
   draw() {
     // Draw player character
-    fill(255, 255, 255);
+    fill(0, 0, 255);
 
     // Draw head
-    ellipse(this.x + this.size / 2, this.y - this.size / 2, this.size * 0.8); // head
+    fill(255, 224, 189); // Skin color
+    ellipse(this.x, this.size / 2, this.y - this.size / 2, this.size * 0.8); // Head
 
     // Draw body
-    rect(this.x + this.size / 4, this.y, this.size / 2, this.size * 1.5); // body
+    fill(0, 0, 255);
+    rect(this.x + this.size / 4, this.y, this.size / 2, this.size); // Body
 
-    // Draw legs with dynamic movement (to simulate running)
+    // Draw legs with a walking animation
+    stroke(0);
     line(
       this.x + this.size / 4,
       this.y + this.size,
       this.x - 10,
-      this.y + this.size + random(10, 20) // Random legs position to simulate running
+      this.y + this.size + random(10, 20)
     );
     line(
       this.x + (3 * this.size) / 4,
       this.y + this.size,
       this.x + this.size,
-      this.y + this.size + 20
+      this.y + this.size + random(10, 20)
     );
 
     // Draw arms
@@ -102,6 +105,6 @@ class Player {
       this.y + this.size / 2,
       this.x + this.size + 10,
       this.y + this.size / 2 + random(10, 20)
-    ); // right arm
+    );
   }
 }

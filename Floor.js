@@ -5,39 +5,34 @@ class Floor {
     this.y = 500;
     this.width = windowWidth;
     this.height = 20;
+
+    // Store tree positions only once in setup
+    this.trees = [];
+    for (let i = 0; i < width; i += random(150, 300)) {
+      this.trees.push({ x: i }); // Create an array of tree positions
+    }
   }
 
   draw() {
+    // Draw the floor
     fill(0, 200, 0);
     rect(this.x, this.y, this.width, this.height);
 
-    // Draw trees
-    for (let i = this.x; i < this.x + width; i += 200) {
-      this.drawTree(i);
-    }
-
-    // Draw butterflies
-    this.drawButterflies();
+    // Draw trees from pre-calculated positions
+    this.trees.forEach((tree) => {
+      this.drawTree(tree.x); // Draw each tree at its fixed position
+    });
   }
 
   drawTree(xPos) {
     fill(139, 69, 19); // Brown tree trunk
-    rect(xPos, this.y - 100, 20, 100);
+    rect(xPos, this.y - 200, 40, 150); // Taller and thicker trunk
     fill(34, 139, 34); // Green tree top
-    ellipse(xPos + 10, this.y - 120, 60, 60);
+    ellipse(xPos + 20, this.y - 250, 120, 120); // Larger tree top
   }
+}
 
-  drawButterflies() {
-    fill(255, 192, 203);
-    for (let i = 0; i < 3; i++) {
-      ellipse(random(width), random(200, 400), 20, 10);
-    }
-  }
-
-  update() {
-    let floorPos = this.x + bob.x;
-    if (floorPos < -windowWidth) {
-      this.x += windowWidth / 2;
-    }
-  }
+update();
+if (this.x + bob.x < -windowWidth) {
+  this.x += windowWidth / 2;
 }
