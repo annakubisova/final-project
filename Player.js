@@ -9,6 +9,22 @@ class Player {
     this.points = 0;
     this.isJumping = false;
     this.isDead = false;
+    this.invincible = false; // Invincibility powerup
+    this.speedMultiplier = 1; // Speed boost powerup
+    this.invincibilityTimer = 0; // Invincibility duration
+    this.speedBoostTimer = 0; // Tracks speed boost duration
+  }
+
+  // Method for speed boost
+  speedBoost() {
+    this.speedMultiplier = 2; // Double speed for 5 seconds
+    this.speedBoostTimer = millis(); // Start timer for 5 seconds
+  }
+
+  // Method for invincibility
+  invincibility() {
+    this.invincible = true; // Bob becomes invincible for 5 seconds
+    this.invincibilityTimer = millis(); // Start timer for 5 seconds
   }
 
   jump() {
@@ -21,51 +37,71 @@ class Player {
   update() {
     if (this.isJumping) {
       this.y += this.yVelocity;
-      this.x += 4;
+      this.x += 4 * this.speedMultiplier; // Use speed boost multiplier
       this.yVelocity += 1;
       if (this.y >= 350) {
         this.y = 350;
         this.isJumping = false;
-        this.yVelocity = 500;
+        this.yVelocity = 0;
       }
+    }
+
+    // Reset speed after 5 seconds
+    if (this.speedBoostTimer && millis() - this.speedBoostTimer > 5000) {
+      this.speedMultiplier = 1; //Reset speed multiplier to normal
+      this.speedBoostTimer = 0;
+    }
+
+    // Reset invincibility after 5 seconds
+    if (this.invincibilityTimer && millis() - this.invincibilityTimer > 5000) {
+      this.invincible = false; // Reset invincibility
+      this.invincibilityTimer = 0;
+    }
+  }
+
+  die() {
+    if (!this.isDead) {
+      this.isDead = true;
+      bobDiedSound.play();
     }
   }
 
   draw() {
+    // Draw player character
     fill(255, 255, 255);
 
     // Draw head
     ellipse(this.x + this.size / 2, this.y - this.size / 2, this.size * 0.8); // head
 
     // Draw body
-    rect(this.x + this.size / 4, this.y, this.size / 2, this.size); // body
+    rect(this.x + this.size / 4, this.y, this.size / 2, this.size * 1.5); // body
 
-    // Draw legs
+    // Draw legs with dynamic movement (to simulate running)
     line(
       this.x + this.size / 4,
       this.y + this.size,
-      this.x,
-      this.y + this.size + 20
-    ); // left leg
+      this.x - 10,
+      this.y + this.size + random(10, 20) // Random legs position to simulate running
+    );
     line(
       this.x + (3 * this.size) / 4,
       this.y + this.size,
       this.x + this.size,
       this.y + this.size + 20
-    ); // right leg
+    );
 
     // Draw arms
     line(
       this.x + this.size / 4,
       this.y + this.size / 2,
-      this.x,
-      this.y + this.size / 2 + 20
-    ); // left arm
+      this.x - 10,
+      this.y + this.size / 2 + random(10, 20)
+    );
     line(
       this.x + (3 * this.size) / 4,
       this.y + this.size / 2,
-      this.x + this.size,
-      this.y + this.size / 2 + 20
+      this.x + this.size + 10,
+      this.y + this.size / 2 + random(10, 20)
     ); // right arm
   }
 }

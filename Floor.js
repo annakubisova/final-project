@@ -3,7 +3,7 @@ class Floor {
   constructor() {
     this.x = 0;
     this.y = 500;
-    this.width = width;
+    this.width = windowWidth;
     this.height = 20;
   }
 

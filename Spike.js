@@ -44,13 +44,14 @@ class Spike {
     let bobLeftEdge = bob.x;
     let bobRightEdge = bob.x + bob.size;
 
-    // Check if the player's x boundaries intersect the spike's x boundaries, and check if the player's y position is on the ground.
+    // Check if Bob's edges intersect the spike's edges, and if he’s on the ground and not invincible
     if (
       bobRightEdge > spikeLeftEdge &&
       bobLeftEdge < spikeRightEdge &&
-      bob.y >= 350
+      bob.y >= 350 &&
+      !bob.invincible
     ) {
-      bob.isDead = true;
+      bob.isDead = true; // Bob dies if he collides with the spike and is not invincible
       console.log("Bob is dead!");
     }
   }
