@@ -2,7 +2,7 @@
 class Spike {
   constructor(x) {
     this.x = x;
-    this.y = 400;
+    this.y = floor.y - 50;
     this.width = 50;
     this.height = 50;
     this.xVelocity = random(-3, -1); // Random speed for each spike

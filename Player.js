@@ -2,7 +2,7 @@
 class Player {
   constructor() {
     this.x = 0;
-    this.y = 350;
+    this.y = floor;
     this.size = 50;
     this.yVelocity = 0;
     this.jumpStrength = 15;
@@ -31,6 +31,7 @@ class Player {
     if (!this.isJumping) {
       this.isJumping = true;
       this.yVelocity = -this.jumpStrength;
+      jumpSound.play();
     }
   }
 
@@ -69,14 +70,22 @@ class Player {
   draw() {
     // Draw player character
     fill(0, 0, 255);
-
-    // Draw head
-    fill(255, 224, 189); // Skin color
-    ellipse(this.x, this.size / 2, this.y - this.size / 2, this.size * 0.8); // Head
-
-    // Draw body
-    fill(0, 0, 255);
     rect(this.x + this.size / 4, this.y, this.size / 2, this.size); // Body
+
+    // Draw Bob's face as an ellipse
+    fill(255); // Solid white face
+    ellipse(
+      this.x + this.size / 2,
+      this.y - this.size / 2,
+      this.size * 0.8,
+      this.size * 0.8
+    ); // White ellipse for the face
+
+    // Draw simple eyes and mouth
+    fill(0); // Black for eyes and mouth
+    ellipse(this.x + this.size / 2 - 10, this.y - this.size / 2 - 5, 5, 5); // Left eye
+    ellipse(this.x + this.size / 2 + 10, this.y - this.size / 2 - 5, 5, 5); // Right eye
+    arc(this.x + this.size / 2, this.y - this.size / 2 + 10, 15, 10, 0, PI); // Simple smiling mouth
 
     // Draw legs with a walking animation
     stroke(0);

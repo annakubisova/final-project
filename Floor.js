@@ -1,38 +1,35 @@
-// Floor.js
 class Floor {
   constructor() {
     this.x = 0;
-    this.y = 500;
+    this.y = 600;
     this.width = windowWidth;
-    this.height = 20;
-
-    // Store tree positions only once in setup
+    this.height = windowHeight;
+    this.treeWidth = 40; // Width of each tree trunk
     this.trees = [];
-    for (let i = 0; i < width; i += random(150, 300)) {
-      this.trees.push({ x: i }); // Create an array of tree positions
+
+    // Tree positions
+    for (let i = 0; i < windowWidth * 2; i += random(300, 600)) {
+      this.trees.push({ x: i });
     }
   }
 
+  // Method to draw the floor and trees
   draw() {
     // Draw the floor
     fill(0, 200, 0);
     rect(this.x, this.y, this.width, this.height);
 
-    // Draw trees from pre-calculated positions
+    // Draw each tree in the trees array
     this.trees.forEach((tree) => {
-      this.drawTree(tree.x); // Draw each tree at its fixed position
+      this.drawTree(tree.x);
     });
   }
 
+  // Separate method to draw an individual tree
   drawTree(xPos) {
-    fill(139, 69, 19); // Brown tree trunk
-    rect(xPos, this.y - 200, 40, 150); // Taller and thicker trunk
-    fill(34, 139, 34); // Green tree top
-    ellipse(xPos + 20, this.y - 250, 120, 120); // Larger tree top
+    fill(139, 69, 19); // Tree trunk color
+    rect(xPos, this.y - 150, this.treeWidth, 150); // Adjust the height to make trees grow from the floor
+    fill(34, 139, 34); // Tree foliage color
+    ellipse(xPos + this.treeWidth / 2, this.y - 200, 120, 120); // Adjust foliage height to match the trunk
   }
-}
-
-update();
-if (this.x + bob.x < -windowWidth) {
-  this.x += windowWidth / 2;
 }

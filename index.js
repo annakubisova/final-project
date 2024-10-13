@@ -1,64 +1,40 @@
-// index.js
+// Endless Runner game was made with help and by courtesy of Felix Stockinger (stfe20sz@student.ju.se)
+// The following lines of code were also made with assistance of ChatGPT; links to chats: https://chatgpt.com/share/67094f38-4324-8004-8851-f36f63426d48, https://chatgpt.com/share/67097073-2a34-8000-93dc-23a7f2a9126f, https://chatgpt.com/share/670970a8-9e70-8000-b70f-1cfc54acd366, https://chatgpt.com/share/670970f6-5c2c-8000-bfa3-46e3d2d36d98, https://chatgpt.com/share/67097129-04ac-8000-8fc5-d9afee1837cb
+// Assistance was also taken from https://www.w3schools.com/js/js_classes.asp
+// Sounds for the game were used and downloaded from https://freesound.org
+
 let drawable = [];
 let spikeArray = []; // add spikes to own list, - this would make it possible to have multiple instances of spikes at the same time
-let blockArray = [];
 let clouds = []; //define clouds array globally
 let powerups = []; // powerups array
 const nrOfSpikes = 10;
-const nrOfBlocks = 5;
 const nrOfPowerups = 2;
 let skyColor = { r: 155, g: 186, b: 255 }; // Sky color object for automatic color change
 let skyTimer = 0; // Timer to control sky color changes
 
 let bob; // Initialize variable for Player
 let floor;
-let enemies = [];
 let gameState = "startScreen"; // Set the initial state to startScreen
 let bgMusic;
-let myMusic;
 let jumpSound;
 let powerupSound;
 let bobDiedSound;
 let gameOverMusic;
 
-function startGame() {
-  // Initialize sounds
-  jumpSound = new Sound("assets/jump.wav"); // Jump sound effect
-  powerupSound = new Sound("assets/powerup.wav"); // Powerup sound effect
-  gameOverMusic = new Sound("assets/gameover.wav"); // Gameover music
-
-  // Start background music
-  bgMusic.loop();
-
-  // Start the game area (your game setup code here)
-  myGameArea.start();
-}
-
-// Example usage of sounds:
-function playerJump() {
-  jumpSound.play(); // Play the jump sound when the player jumps
-}
-
-function collectPowerup() {
-  powerupSound.play(); // Play the powerup sound when a powerup is collected
-}
-
 function preload() {
   bgMusic = loadSound("assets/background.wav");
+  jumpSound = loadSound("assets/jump.wav");
   bobDiedSound = loadSound("assets/bobdied.wav");
   gameOverMusic = loadSound("assets/gameover.wav");
-
-  // Load powerup sound
   powerupSound = loadSound("assets/powerup.wav");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  bgMusic.loop();
 
-  // initialize player and floor inside setup
-  bob = new Player();
+  // Initialize player and floor inside setup
   floor = new Floor();
+  bob = new Player();
   drawable.push(bob);
   drawable.push(floor);
 
@@ -73,12 +49,6 @@ function setup() {
       i === 0 ? new Spike(bob.x + 200) : new Spike(spikeArray[i - 1].x + 400);
   }
 
-  // Initialize enemies array
-  for (let i = 0; i < 5; i++) {
-    let type = random(["bird", "monster"]);
-    enemies.push(new Enemy(type)); // Create either a bird or a monster
-  }
-
   // Create powerups
   for (let i = 0; i < nrOfPowerups; i++) {
     powerups.push(new Powerup(random(bob.x + 500, bob.x + 1000)));
@@ -86,81 +56,105 @@ function setup() {
 }
 
 function draw() {
-  if (gameState === "startScreen") {
-    background(135, 206, 235); // Sky blue background
-    drawStartScreen();
-  } else if (gameState === "playing") {
-    drawBackground();
-
-    // Game logic: draw and update objects if Bob is not dead
-    push(); // Save the current transformation state
-    translate(-bob.x + width / 2 - bob.size / 2, 350);
-
-    // Draw floor, spikes, blocks, enemies, powerups and player
-    floor.draw();
-    spikeArray.forEach((spike) => {
-      spike.update();
-      spike.draw();
-    });
-
-    blockArray.forEach((block) => {
-      block.update();
-      block.draw();
-    });
-
-    enemies.forEach((enemy) => {
-      enemy.update();
-      enemy.draw();
-      if (enemy.checkCollision(bob)) {
-        bob.isDead = true; // Handle collision with enemy
-      }
-    });
-
-    powerups.forEach((powerup) => {
-      powerup.update();
-      powerup.draw();
-      if (powerup.checkCollision(bob)) {
-        powerup.applyEffect(bob);
-      }
-    });
-
-    bob.update();
-    bob.draw();
-
-    pop(); // Restore the original transformation state
-
-    // Check if Bob is dead and switch to 'gameOver' state
-    if (bob.isDead) {
-      gameState = "gameOver";
-      // bobDiedSound.play();
-    }
-  } else if (gameState === "gameOver") {
-    // Display "Game Over" text on the screen
-    drawGameOver();
-  }
-
+  drawBackground();
   // Display debugging info
   debugText();
+
+  if (gameState === "startScreen") {
+    drawStartScreen();
+  } else if (gameState === "playing") {
+    playGame();
+  } else if (gameState === "gameOver") {
+    drawGameOver();
+  }
 }
 
 function drawStartScreen() {
+  fill(0);
+  textSize(50);
+  textAlign(CENTER, CENTER);
+  text("Endless Runner 🏃‍♂️", width / 2, height / 2 - 50);
+  textSize(30);
+  text("Press ENTER to start the game", width / 2, height / 2 + 50);
+}
+
+function playGame() {
+  drawBackground();
+  floor.draw();
+
+  push(); // Save current transformation state
+  translate(-bob.x + width / 2 - bob.size / 2, 350);
+
+  spikeArray.forEach((spike) => {
+    spike.update();
+    spike.draw();
+  });
+
+  powerups.forEach((powerup) => {
+    powerup.update();
+    powerup.draw();
+    if (powerup.checkCollision(bob)) {
+      powerup.applyEffect(bob);
+    }
+  });
+
+  bob.update();
+  bob.draw();
+
+  pop(); // Restore the original transformation state
+
+  // Check if Bob is dead and switch to 'gameOver' state
+  if (bob.isDead) {
+    gameState = "gameOver";
+    gameOverMusic.play();
+  }
+}
+
+// Function to draw the game over screen
+function drawGameOver() {
   background(135, 206, 235);
   fill(0);
   textSize(50);
   textAlign(CENTER, CENTER);
-  text("Endless Runner", width / 2, height / 2 - 50);
+  text("GAME OVER", width / 2, height / 2 - 50);
   textSize(30);
-  text("Press ENTER to start the game", width / 2, height / 2 + 50);
+  text("Press R to restart the game", width / 2, height / 2 + 50);
+
+  // Show the game over screen
+  let endScreen = select(".end-screen");
+  if (endScreen) endScreen.style("display", "block");
+
+  // Play game over music only once
+  if (!gameOverMusic.isPlaying()) {
+    gameOverMusic.play();
+  }
 }
 
 function keyPressed() {
   if (keyCode === ENTER && gameState === "startScreen") {
     gameState = "playing"; // Start the game
+
+    // Hide the start screen text
+    let title = select(".game-title");
+    let instructions = select(".game-instructions");
+    if (title) title.style("display", "none");
+    if (instructions) instructions.style("display", "none");
+
+    // Start background music
+    if (!bgMusic.isPlaying()) {
+      bgMusic.loop();
+    }
   } else if (keyCode === UP_ARROW && gameState === "playing" && !bob.isDead) {
-    bob.jump(); // Bob jumps with up arrowy
+    bob.jump(); // Bob jumps with UP_ARROW
   } else if ((key === "r" || key === "R") && gameState === "gameOver") {
     resetGame(); // Reset the game
     gameOverMusic.stop(); // Stop game over music
+
+    // Hide the Game Over screen
+    let endScreen = select(".end-screen");
+    if (endScreen) endScreen.style("display", "none");
+
+    gameOverMusic.stop(); // Stop game-over music
   }
 }
 
@@ -197,7 +191,7 @@ function drawBackground() {
   });
 }
 
-// Function to draw a cloud at a specific position
+// Function to draw clouds
 function makeCloud(cloudx, cloudy) {
   fill(250);
   noStroke();
@@ -207,23 +201,7 @@ function makeCloud(cloudx, cloudy) {
   ellipse(cloudx - 70, cloudy + 10, 70, 50);
 }
 
-function drawGameOver() {
-  // Clear the screen
-  background(135, 206, 235); // Optional: Keep the background sky
-  fill(0);
-  textSize(50);
-  textAlign(CENTER, CENTER);
-  text("GAME OVER:", width / 2, height / 2 - 50);
-  textSize(30);
-  text("Press R to restart the game", width / 2, height / 2 + 50);
-
-  // Play game music only once
-  if (!gameOverMusic.isPlaying()) {
-    gameOverMusic.play();
-  }
-}
-
-// Reset the game when the player dies
+// Function to reset the game
 function resetGame() {
   bob = new Player();
   bob.x = 0;
@@ -231,22 +209,12 @@ function resetGame() {
   bob.points = 0;
   bob.isDead = false;
 
-  // Reset floor
+  // Reset floor and spikes
   floor = new Floor();
-
-  // Reset spikes
   spikeArray = [];
   for (let i = 0; i < nrOfSpikes; i++) {
     spikeArray[i] = new Spike(
       i === 0 ? bob.x + 200 : spikeArray[i - 1].x + 400
-    );
-  }
-
-  // Reset blocks
-  blockArray = [];
-  for (let i = 0; i < nrOfBlocks; i++) {
-    blockArray[i] = new Block(
-      i === 0 ? bob.x + 600 : blockArray[i - 1].x + 500
     );
   }
 
@@ -255,9 +223,6 @@ function resetGame() {
   for (let i = 0; i < nrOfPowerups; i++) {
     powerups.push(new Powerup(random(bob.x + 500, bob.x + 1000)));
   }
-
-  // Reset enemies
-  enemies = [];
 
   gameState = "playing";
 }
@@ -274,13 +239,13 @@ function debugText() {
   let yPos = height / 2 - 100; // Start near the middle of the screen, offset upwards
 
   // Display debug information with vertical spacing of 30 pixels
-  text("Y_index of bob: " + bob.y, xPos, yPos);
-  text("X_index of bob: " + bob.x, xPos, yPos + 30);
-  text("WindowWidth: " + windowWidth, xPos, yPos + 60);
-  text("WindowHeight: " + windowHeight, xPos, yPos + 90);
-  text("X of floor: " + floor.x, xPos, yPos + 120);
+  // text("Y_index of bob: " + bob.y, xPos, yPos);
+  // text("X_index of bob: " + bob.x, xPos, yPos + 30);
+  // text("WindowWidth: " + windowWidth, xPos, yPos + 60);
+  // text("WindowHeight: " + windowHeight, xPos, yPos + 90);
+  // text("X of floor: " + floor.x, xPos, yPos + 120);
+  // text("Dead: " + bob.isDead, xPos, yPos + 180); // Dead status
   text("Points: " + bob.points, xPos, yPos + 150);
-  text("Dead: " + bob.isDead, xPos, yPos + 180); // Dead status
 }
 
 function windowResized() {
