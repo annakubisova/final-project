@@ -11,9 +11,11 @@ const nrOfSpikes = 10;
 const nrOfPowerups = 2;
 let skyColor = { r: 155, g: 186, b: 255 }; // Sky color object for automatic color change
 let skyTimer = 0; // Timer to control sky color changes
+let sunAngle = 0;
 
 let bob; // Initialize variable for Player
 let floor;
+let floorTop = 600;
 let gameState = "startScreen"; // Set the initial state to startScreen
 let bgMusic;
 let jumpSound;
@@ -33,7 +35,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
 
   // Initialize player and floor inside setup
-  floor = new Floor();
+  floorTop = windowHeight - 100;
+  floor = new Floor(floorTop);
   bob = new Player();
   drawable.push(bob);
   drawable.push(floor);
@@ -171,6 +174,17 @@ function drawBackground() {
   // Draw sun
   fill(255, 204, 0);
   ellipse(width - 300, 150, 150);
+
+  // Eyes
+  fill(0);
+  ellipse(width - 320, 130, 15, 15);
+  ellipse(width - 280, 130, 15, 15);
+
+  // Smile
+  noFill();
+  stroke(0);
+  strokeWeight(3); // Thicker stroke for smile
+  arc(width - 300, 160, 80, 50, 0, PI);
 
   // Draw mountains
   fill(220);

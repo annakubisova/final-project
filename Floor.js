@@ -3,7 +3,7 @@ class Floor {
     this.x = 0;
     this.y = 600;
     this.width = windowWidth;
-    this.height = windowHeight;
+    this.height = 600;
     this.treeWidth = 40; // Width of each tree trunk
     this.trees = [];
 

@@ -1,8 +1,9 @@
 // Player.js
+bobBaseY = 200;
 class Player {
   constructor() {
     this.x = 0;
-    this.y = floor;
+    this.y = bobBaseY; // floor.y
     this.size = 50;
     this.yVelocity = 0;
     this.jumpStrength = 15;
@@ -40,8 +41,8 @@ class Player {
       this.y += this.yVelocity;
       this.x += 4 * this.speedMultiplier; // Use speed boost multiplier
       this.yVelocity += 1;
-      if (this.y >= 350) {
-        this.y = 350;
+      if (this.y >= bobBaseY) {
+        this.y = bobBaseY;
         this.isJumping = false;
         this.yVelocity = 0;
       }
